@@ -38,12 +38,22 @@ const CartItem = ({ onContinueShopping }) => {
         dispatch(updateQuantity({ ...item, quantity: item.quantity - 1 }));
     } else {
         dispatch(removeItem(item)); // Remove item if quantity is 1
+        setAddedToCart((prevState) => ({
+            ...prevState,
+            [item.name]: false, // Reset button state when item is removed
+          }));
     }
   };
 
   const handleRemove = (item) => {
     dispatch(removeItem(item));
-  };
+
+    // Update addedToCart state to false when item is removed
+    setAddedToCart((prevState) => ({
+    ...prevState,
+    [item.name]: false, // Set to false when item is removed
+  }));
+};
 
   // Calculate total cost based on quantity for an item
   const calculateTotalCost = (item) => {
@@ -53,6 +63,7 @@ const CartItem = ({ onContinueShopping }) => {
 
     return totalCost;
 };
+
   return (
     <div className="cart-container">
       <h2 style={{ color: 'black' }}>Total Cart Amount: ${calculateTotalAmount()}</h2>

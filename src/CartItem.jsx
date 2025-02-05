@@ -4,7 +4,7 @@ import { removeItem, updateQuantity } from './CartSlice';
 import './CartItem.css';
 
 const CartItem = ({ onContinueShopping }) => {
-  const cart = useSelector(state => state.cart.items);
+    const cart = useSelector(state => state.cart.items);
   const dispatch = useDispatch();
 
   const parseItemCostToInteger = (itemCost) => {
@@ -38,20 +38,15 @@ const CartItem = ({ onContinueShopping }) => {
 
 
   const handleIncrement = (item) => {
-    const updatedItem = { ...item };
-    updatedItem.quantity++;
-    dispatch(updateQuantity(updatedItem));
+    dispatch(updateQuantity({ ...item, quantity: item.quantity + 1 }));
   };
 
   const handleDecrement = (item) => {
-    const updatedItem = { ...item };
-
-        if (updatedItem.quantity == 1) {
-            dispatch(removeItem(updatedItem));
-        } else {
-            updatedItem.quantity--;
-            dispatch(updateQuantity(updatedItem));
-        }
+    if (item.quantity > 1) {
+        dispatch(updateQuantity({ ...item, quantity: item.quantity - 1 }));
+    } else {
+        dispatch(removeItem(item)); // Remove item if quantity is 1
+    }
   };
 
   const handleRemove = (item) => {
